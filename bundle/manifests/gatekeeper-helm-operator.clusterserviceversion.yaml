@@ -233,7 +233,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-    operators.operatorframework.io/builder: operator-sdk-v1.13.0+git
+    operators.operatorframework.io/builder: operator-sdk-v1.19.0+git
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
   name: gatekeeper-helm-operator.v0.0.1
   namespace: placeholder
@@ -244,7 +244,7 @@ spec:
     - kind: Gatekeeper
       name: gatekeepers.charts.gatekeeper.sh
       version: v1alpha1
-  description: helm operator
+  description: gatekeeper operator
   displayName: Gatekeeper Helm Operator
   icon:
   - base64data: ""
@@ -286,6 +286,12 @@ spec:
           - update
           - watch
         - apiGroups:
+          - policy
+          resources:
+          - podsecuritypolicies
+          verbs:
+          - '*'
+        - apiGroups:
           - rbac.authorization.k8s.io
           resources:
           - clusterrolebindings
@@ -297,12 +303,6 @@ spec:
           resources:
           - mutatingwebhookconfigurations
           - validatingwebhookconfigurations
-          verbs:
-          - '*'
-        - apiGroups:
-          - policy
-          resources:
-          - podsecuritypolicies
           verbs:
           - '*'
         - apiGroups:
@@ -334,6 +334,30 @@ spec:
           verbs:
           - '*'
         - apiGroups:
+          - apiextensions.k8s.io
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - batch
+          resources:
+          - jobs
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
           - authentication.k8s.io
           resources:
           - tokenreviews
@@ -347,7 +371,9 @@ spec:
           - create
         serviceAccountName: gatekeeper-helm-operator-controller-manager
       deployments:
-      - name: gatekeeper-helm-operator-controller-manager
+      - label:
+          control-plane: controller-manager
+        name: gatekeeper-helm-operator-controller-manager
         spec:
           replicas: 1
           selector:
@@ -356,6 +382,8 @@ spec:
           strategy: {}
           template:
             metadata:
+              annotations:
+                kubectl.kubernetes.io/default-container: manager
               labels:
                 control-plane: controller-manager
             spec:
@@ -364,14 +392,20 @@ spec:
                 - --secure-listen-address=0.0.0.0:8443
                 - --upstream=http://127.0.0.1:8080/
                 - --logtostderr=true
-                - --v=10
+                - --v=0
                 image: gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
                 name: kube-rbac-proxy
                 ports:
                 - containerPort: 8443
                   name: https
                   protocol: TCP
-                resources: {}
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 5m
+                    memory: 64Mi
               - args:
                 - --health-probe-bind-address=:8081
                 - --metrics-bind-address=127.0.0.1:8080
@@ -393,11 +427,11 @@ spec:
                   periodSeconds: 10
                 resources:
                   limits:
-                    cpu: 200m
-                    memory: 100Mi
+                    cpu: 500m
+                    memory: 128Mi
                   requests:
-                    cpu: 100m
-                    memory: 60Mi
+                    cpu: 10m
+                    memory: 64Mi
                 securityContext:
                   allowPrivilegeEscalation: false
               securityContext:
@@ -458,5 +492,5 @@ spec:
     name: thomasmckay
   maturity: alpha
   provider:
-    name: Community
+    name: community
   version: 0.0.1

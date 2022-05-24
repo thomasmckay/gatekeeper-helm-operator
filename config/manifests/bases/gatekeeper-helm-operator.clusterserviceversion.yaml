@@ -9,7 +9,7 @@ metadata:
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions: {}
-  description: helm operator
+  description: gatekeeper operator
   displayName: Gatekeeper Helm Operator
   icon:
   - base64data: ""
@@ -37,5 +37,5 @@ spec:
     name: thomasmckay
   maturity: alpha
   provider:
-    name: Community
+    name: community
   version: 0.0.0
