@@ -1,0 +1,175 @@
+apiVersion: charts.gatekeeper.sh/v1alpha1
+kind: Gatekeeper
+metadata:
+  name: gatekeeper-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/gatekeeper/values.yaml
+  audit:
+    affinity: {}
+    dnsPolicy: ClusterFirst
+    healthPort: 9090
+    hostNetwork: false
+    metricsPort: 8888
+    nodeSelector:
+      kubernetes.io/os: linux
+    priorityClassName: system-cluster-critical
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      readOnlyRootFilesystem: true
+      runAsGroup: 999
+      runAsNonRoot: true
+      runAsUser: 1000
+    tolerations: []
+    writeToRAMDisk: false
+  auditChunkSize: 500
+  auditFromCache: false
+  auditInterval: 60
+  auditMatchKindOnly: false
+  constraintViolationsLimit: 20
+  controllerManager:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: gatekeeper.sh/operation
+                operator: In
+                values:
+                - webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+    dnsPolicy: ClusterFirst
+    exemptNamespacePrefixes: []
+    exemptNamespaces: []
+    healthPort: 9090
+    hostNetwork: false
+    metricsPort: 8888
+    nodeSelector:
+      kubernetes.io/os: linux
+    port: 8443
+    priorityClassName: system-cluster-critical
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      readOnlyRootFilesystem: true
+      runAsGroup: 999
+      runAsNonRoot: true
+      runAsUser: 1000
+    tolerations: []
+  crds:
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      readOnlyRootFilesystem: true
+      runAsGroup: 65532
+      runAsNonRoot: true
+      runAsUser: 65532
+  disableMutation: false
+  disableValidatingWebhook: false
+  disabledBuiltins:
+  - '{http.send}'
+  emitAdmissionEvents: false
+  emitAuditEvents: false
+  enableDeleteOperations: false
+  enableExternalData: false
+  enableTLSHealthcheck: false
+  image:
+    crdRepository: openpolicyagent/gatekeeper-crds
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    release: v3.9.0-beta.1
+    repository: openpolicyagent/gatekeeper
+  logDenies: false
+  logLevel: INFO
+  logMutations: false
+  mutatingWebhookCustomRules: {}
+  mutatingWebhookExemptNamespacesLabels: {}
+  mutatingWebhookFailurePolicy: Ignore
+  mutatingWebhookObjectSelector: {}
+  mutatingWebhookReinvocationPolicy: Never
+  mutatingWebhookTimeoutSeconds: 1
+  mutationAnnotations: false
+  pdb:
+    controllerManager:
+      minAvailable: 1
+  podAnnotations:
+    container.seccomp.security.alpha.kubernetes.io/manager: runtime/default
+  podCountLimit: 100
+  podLabels: {}
+  postInstall:
+    labelNamespace:
+      enabled: true
+      extraNamespaces: []
+      image:
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        repository: openpolicyagent/gatekeeper-crds
+        tag: v3.9.0-beta.1
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      readOnlyRootFilesystem: true
+      runAsGroup: 999
+      runAsNonRoot: true
+      runAsUser: 1000
+  preUninstall:
+    deleteWebhookConfigurations:
+      enabled: false
+      image:
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        repository: openpolicyagent/gatekeeper-crds
+        tag: v3.9.0-beta.1
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      readOnlyRootFilesystem: true
+      runAsGroup: 999
+      runAsNonRoot: true
+      runAsUser: 1000
+  psp:
+    enabled: true
+  rbac:
+    create: true
+  replicas: 3
+  resourceQuota: true
+  secretAnnotations: {}
+  service: {}
+  upgradeCRDs:
+    enabled: true
+    tolerations: []
+  validatingWebhookCheckIgnoreFailurePolicy: Fail
+  validatingWebhookCustomRules: {}
+  validatingWebhookExemptNamespacesLabels: {}
+  validatingWebhookFailurePolicy: Ignore
+  validatingWebhookObjectSelector: {}
+  validatingWebhookTimeoutSeconds: 3
+  
+  
