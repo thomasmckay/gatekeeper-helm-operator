@@ -1,0 +1,462 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "charts.gatekeeper.sh/v1alpha1",
+          "kind": "Gatekeeper",
+          "metadata": {
+            "name": "gatekeeper-sample"
+          },
+          "spec": {
+            "audit": {
+              "affinity": {},
+              "dnsPolicy": "ClusterFirst",
+              "healthPort": 9090,
+              "hostNetwork": false,
+              "metricsPort": 8888,
+              "nodeSelector": {
+                "kubernetes.io/os": "linux"
+              },
+              "priorityClassName": "system-cluster-critical",
+              "resources": {
+                "limits": {
+                  "cpu": "1000m",
+                  "memory": "512Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+                }
+              },
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "capabilities": {
+                  "drop": [
+                    "all"
+                  ]
+                },
+                "readOnlyRootFilesystem": true,
+                "runAsGroup": 999,
+                "runAsNonRoot": true,
+                "runAsUser": 1000
+              },
+              "tolerations": [],
+              "writeToRAMDisk": false
+            },
+            "auditChunkSize": 500,
+            "auditFromCache": false,
+            "auditInterval": 60,
+            "auditMatchKindOnly": false,
+            "constraintViolationsLimit": 20,
+            "controllerManager": {
+              "affinity": {
+                "podAntiAffinity": {
+                  "preferredDuringSchedulingIgnoredDuringExecution": [
+                    {
+                      "podAffinityTerm": {
+                        "labelSelector": {
+                          "matchExpressions": [
+                            {
+                              "key": "gatekeeper.sh/operation",
+                              "operator": "In",
+                              "values": [
+                                "webhook"
+                              ]
+                            }
+                          ]
+                        },
+                        "topologyKey": "kubernetes.io/hostname"
+                      },
+                      "weight": 100
+                    }
+                  ]
+                }
+              },
+              "dnsPolicy": "ClusterFirst",
+              "exemptNamespacePrefixes": [],
+              "exemptNamespaces": [],
+              "healthPort": 9090,
+              "hostNetwork": false,
+              "metricsPort": 8888,
+              "nodeSelector": {
+                "kubernetes.io/os": "linux"
+              },
+              "port": 8443,
+              "priorityClassName": "system-cluster-critical",
+              "resources": {
+                "limits": {
+                  "cpu": "1000m",
+                  "memory": "512Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+                }
+              },
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "capabilities": {
+                  "drop": [
+                    "all"
+                  ]
+                },
+                "readOnlyRootFilesystem": true,
+                "runAsGroup": 999,
+                "runAsNonRoot": true,
+                "runAsUser": 1000
+              },
+              "tolerations": []
+            },
+            "crds": {
+              "resources": {},
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "capabilities": {
+                  "drop": [
+                    "all"
+                  ]
+                },
+                "readOnlyRootFilesystem": true,
+                "runAsGroup": 65532,
+                "runAsNonRoot": true,
+                "runAsUser": 65532
+              }
+            },
+            "disableMutation": false,
+            "disableValidatingWebhook": false,
+            "disabledBuiltins": [
+              "{http.send}"
+            ],
+            "emitAdmissionEvents": false,
+            "emitAuditEvents": false,
+            "enableDeleteOperations": false,
+            "enableExternalData": false,
+            "enableTLSHealthcheck": false,
+            "image": {
+              "crdRepository": "openpolicyagent/gatekeeper-crds",
+              "pullPolicy": "IfNotPresent",
+              "pullSecrets": [],
+              "release": "v3.9.0-beta.1",
+              "repository": "openpolicyagent/gatekeeper"
+            },
+            "logDenies": false,
+            "logLevel": "INFO",
+            "logMutations": false,
+            "mutatingWebhookCustomRules": {},
+            "mutatingWebhookExemptNamespacesLabels": {},
+            "mutatingWebhookFailurePolicy": "Ignore",
+            "mutatingWebhookObjectSelector": {},
+            "mutatingWebhookReinvocationPolicy": "Never",
+            "mutatingWebhookTimeoutSeconds": 1,
+            "mutationAnnotations": false,
+            "pdb": {
+              "controllerManager": {
+                "minAvailable": 1
+              }
+            },
+            "podAnnotations": {
+              "container.seccomp.security.alpha.kubernetes.io/manager": "runtime/default"
+            },
+            "podCountLimit": 100,
+            "podLabels": {},
+            "postInstall": {
+              "labelNamespace": {
+                "enabled": true,
+                "extraNamespaces": [],
+                "image": {
+                  "pullPolicy": "IfNotPresent",
+                  "pullSecrets": [],
+                  "repository": "openpolicyagent/gatekeeper-crds",
+                  "tag": "v3.9.0-beta.1"
+                }
+              },
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "capabilities": {
+                  "drop": [
+                    "all"
+                  ]
+                },
+                "readOnlyRootFilesystem": true,
+                "runAsGroup": 999,
+                "runAsNonRoot": true,
+                "runAsUser": 1000
+              }
+            },
+            "preUninstall": {
+              "deleteWebhookConfigurations": {
+                "enabled": false,
+                "image": {
+                  "pullPolicy": "IfNotPresent",
+                  "pullSecrets": [],
+                  "repository": "openpolicyagent/gatekeeper-crds",
+                  "tag": "v3.9.0-beta.1"
+                }
+              },
+              "securityContext": {
+                "allowPrivilegeEscalation": false,
+                "capabilities": {
+                  "drop": [
+                    "all"
+                  ]
+                },
+                "readOnlyRootFilesystem": true,
+                "runAsGroup": 999,
+                "runAsNonRoot": true,
+                "runAsUser": 1000
+              }
+            },
+            "psp": {
+              "enabled": true
+            },
+            "rbac": {
+              "create": true
+            },
+            "replicas": 3,
+            "resourceQuota": true,
+            "secretAnnotations": {},
+            "service": {},
+            "upgradeCRDs": {
+              "enabled": true,
+              "tolerations": []
+            },
+            "validatingWebhookCheckIgnoreFailurePolicy": "Fail",
+            "validatingWebhookCustomRules": {},
+            "validatingWebhookExemptNamespacesLabels": {},
+            "validatingWebhookFailurePolicy": "Ignore",
+            "validatingWebhookObjectSelector": {},
+            "validatingWebhookTimeoutSeconds": 3
+          }
+        }
+      ]
+    capabilities: Basic Install
+    operators.operatorframework.io/builder: operator-sdk-v1.13.0+git
+    operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
+  name: gatekeeper-helm-operator.v0.0.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - kind: Gatekeeper
+      name: gatekeepers.charts.gatekeeper.sh
+      version: v1alpha1
+  description: helm operator
+  displayName: Gatekeeper Helm Operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+        - apiGroups:
+          - charts.gatekeeper.sh
+          resources:
+          - gatekeepers
+          - gatekeepers/status
+          - gatekeepers/finalizers
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterrolebindings
+          - clusterroles
+          verbs:
+          - '*'
+        - apiGroups:
+          - admissionregistration.k8s.io
+          resources:
+          - mutatingwebhookconfigurations
+          - validatingwebhookconfigurations
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - podsecuritypolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - resourcequotas
+          - secrets
+          - serviceaccounts
+          - services
+          verbs:
+          - '*'
+        - apiGroups:
+          - policy
+          resources:
+          - poddisruptionbudgets
+          verbs:
+          - '*'
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - rolebindings
+          - roles
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          verbs:
+          - '*'
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        serviceAccountName: gatekeeper-helm-operator-controller-manager
+      deployments:
+      - name: gatekeeper-helm-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=10
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                  protocol: TCP
+                resources: {}
+              - args:
+                - --health-probe-bind-address=:8081
+                - --metrics-bind-address=127.0.0.1:8080
+                - --leader-elect
+                - --leader-election-id=gatekeeper-helm-operator
+                image: quay.io/thomasmckay/gatekeeper-helm-operator:v0.0.1
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 200m
+                    memory: 100Mi
+                  requests:
+                    cpu: 100m
+                    memory: 60Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: gatekeeper-helm-operator-controller-manager
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: gatekeeper-helm-operator-controller-manager
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - gatekeeper
+  links:
+  - name: Gatekeeper Helm Operator
+    url: https://gatekeeper-helm-operator.domain
+  maintainers:
+  - email: thomasmckay@redhat.com
+    name: thomasmckay
+  maturity: alpha
+  provider:
+    name: Community
+  version: 0.0.1
