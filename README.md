@@ -1,3 +1,5 @@
+Following https://sdk.operatorframework.io/docs/building-operators/helm/tutorial/
+
 Setup
 ```
 $ operator-sdk version
@@ -10,7 +12,6 @@ kind v0.11.1 go1.16.4 linux/amd64
 Project creation from https://github.com/open-policy-agent/gatekeeper/tree/master/charts/gatekeeper
 ```
 operator-sdk init --domain gatekeeper.sh --plugins helm --helm-chart ../gatekeeper/charts/gatekeeper
-make docker-build docker-push IMAGE_TAG_BASE=quay.io/thomasmckay/gatekeeper-helm-operator
 make docker-build docker-push IMAGE_TAG_BASE=quay.io/thomasmckay/gatekeeper-helm-operator
 kind create cluster
 operator-sdk olm install
